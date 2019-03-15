@@ -1,0 +1,44 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package es_preverifica1;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author diliberti_alessandro
+ */
+public class ThContaP extends Thread{
+    private char[]lista;
+    private DatiCondivisi ptrDati;
+
+    public ThContaP(DatiCondivisi ptrDati) {       
+        this.ptrDati = ptrDati;
+        this.lista = ptrDati.getLista();
+    }
+    
+    public void run(){
+        for(int i=0;i<ptrDati.getMaxEle();i++){
+            try {
+                ptrDati.Sem2Wait();
+                int cont=0;
+                lista = ptrDati.getLista();
+                for(int j=0;j<ptrDati.getMaxEle();j++){
+                    if(lista[j]=='.'){
+                        cont++;
+                    }
+                }
+                ptrDati.setPuntiLetti(cont);
+                ptrDati.Sem3Signal();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ThContaP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
+}
